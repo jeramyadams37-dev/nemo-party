@@ -61,3 +61,11 @@ let a=[],lock=0;function mk(){const e=["🐠","🐢","🦈","🐙","🦀","🐡"
 async function load(){try{const r=await(await fetch(U,{headers:H})).json();gl.innerHTML=r.reverse().map(x=>`<div class=msg><b>${x.n}</b><br>${x.t}</div>`).join("")}catch(e){gl.textContent="Couldn't load messages"}}
 async function post(){const n=gn.value.trim()||"Guest",t=gm.value.trim().replace(/</g,"&lt;");if(!t)return;try{const r=await(await fetch(U,{headers:H})).json();r.push({n:n.replace(/</g,"&lt;"),t});await fetch(U,{method:"PUT",headers:H,body:JSON.stringify(r)});gm.value="";load()}catch(e){alert("Error: "+e)}}
 </script></body></html>
+<script>/*fb*/
+const F="https://jeramyadams37-dev.github.io/nemo-party/?v=3";
+async function G(){const r=await(await fetch(F+"/gb.json")).json();return r?Object.values(r):[]}
+async function load(){try{const r=await G();gl.innerHTML=r.reverse().map(x=>`<div class=msg><b>${x.n}</b><br>${x.t}</div>`).join("")}catch(e){gl.textContent="Couldn't load messages"}}
+async function post(){const n=gn.value.trim()||"Guest",t=gm.value.trim().replace(/</g,"&lt;");if(!t)return;try{const r=await fetch(F+"/gb.json",{method:"POST",body:JSON.stringify({n:n.replace(/</g,"&lt;"),t})});if(!r.ok)throw new Error(r.status);gm.value="";load()}catch(e){alert("Error: "+e)}}
+async function draw(){if(prompt("Host PIN?")!=="1108")return;dc.textContent="";let r;try{r=await G()}catch(e){dp.textContent="Couldn't load entries";return}
+const m=new Map();r.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&k!=="guest")m.set(k,x.n.trim())});const L=[...m.values()];if(!L.length){dp.textContent="No entries yet!";return}dc.textContent=L.length+" entered";let n=0;const w=L[Math.random()*L.length|0];const t=setInterval(()=>{dp.textContent="🎟️ "+L[Math.random()*L.length|0];if(++n>25){clearInterval(t);dp.textContent="🎉 "+w+" 🎉"}},120)}
+</script>
