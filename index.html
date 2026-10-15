@@ -1,0 +1,32 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Ilah Hugh Reed's Nemo Party</title>
+<style>
+body{margin:0;font-family:system-ui;background:linear-gradient(#37b6ff,#0a4d8c);color:#fff;min-height:100vh;text-align:center}
+h1{margin:14px 8px 4px}nav{display:flex;gap:6px;justify-content:center;padding:8px;flex-wrap:wrap}
+button{background:#ff8a1f;color:#fff;border:0;border-radius:20px;padding:10px 16px;font-size:16px}
+section{display:none;padding:10px}section.on{display:block}
+.g{columns:2;gap:8px}.g img{width:100%;margin-bottom:8px;border-radius:12px}
+#sea{position:relative;height:60vh;background:#0006;border-radius:16px;overflow:hidden}
+.bub{position:absolute;bottom:-60px;font-size:46px;animation:r 6s linear forwards}
+@keyframes r{to{transform:translateY(-75vh)}}
+.m{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:400px;margin:auto}
+.c{aspect-ratio:1;background:#ff8a1f;border-radius:12px;font-size:36px;display:flex;align-items:center;justify-content:center}
+.c.f{background:#fff}
+textarea,input{width:90%;max-width:400px;padding:10px;border-radius:10px;border:0;font-size:16px;margin:4px}
+.msg{background:#fff3;border-radius:12px;margin:8px auto;padding:8px;max-width:400px}
+</style></head><body>
+<h1>🐠 Ilah Hugh Reed is 2! 🐠</h1><div>Just keep swimming!</div>
+<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button></nav>
+<section class=on><div class=g id=g></div></section>
+<section><h2>Score: <span id=sc>0</span></h2><div id=sea></div></section>
+<section><h2>Find the pairs!</h2><div class=m id=m></div><p><button onclick=mk()>New game</button></p></section>
+<section><input id=gn placeholder="Your name"><br><textarea id=gm rows=3 placeholder="Leave a message"></textarea><br><button onclick=post()>Send 💙</button><div id=gl></div></section>
+<script>
+const P=[],B="",U="https://jsonblob.com/api/jsonBlob/"+B,H={"Content-Type":"application/json","Accept":"application/json"};
+const S=document.querySelectorAll("section");let t;
+function show(n){S.forEach((s,i)=>s.classList.toggle("on",i==n));clearInterval(t);if(n==1)t=setInterval(bub,700);if(n==2)mk();if(n==3)load()}
+g.innerHTML=P.map(p=>`<img loading=lazy src="${p}">`).join("");
+let sc0=0;function bub(){const b=document.createElement("div");b.className="bub";b.textContent=["🫧","🐠","🐟","🫧"][Math.random()*4|0];b.style.left=Math.random()*80+"%";b.onpointerdown=()=>{sc.textContent=++sc0;b.remove()};b.onanimationend=()=>b.remove();sea.appendChild(b)}
+let a=[],lock=0;function mk(){const e=["🐠","🐢","🦈","🐙","🦀","🐡","🐬","🐳"];const d=[...e,...e].sort(()=>Math.random()-.5);m.innerHTML="";a=[];d.forEach(x=>{const c=document.createElement("div");c.className="c";c.textContent="❓";c.onclick=()=>{if(lock||c.classList.contains("f")||a.includes(c))return;c.textContent=x;c.classList.add("f");a.push(c);if(a.length==2){lock=1;const[p,q]=a;if(p.textContent==q.textContent){a=[];lock=0}else setTimeout(()=>{[p,q].forEach(z=>{z.textContent="❓";z.classList.remove("f")});a=[];lock=0},800)}};m.appendChild(c)})}
+async function load(){try{const r=await(await fetch(U,{headers:H})).json();gl.innerHTML=r.reverse().map(x=>`<div class=msg><b>${x.n}</b><br>${x.t}</div>`).join("")}catch(e){gl.textContent="Couldn't load messages"}}
+async function post(){const n=gn.value.trim()||"Guest",t=gm.value.trim().replace(/</g,"&lt;");if(!t)return;try{const r=await(await fetch(U,{headers:H})).json();r.push({n:n.replace(/</g,"&lt;"),t});await fetch(U,{method:"PUT",headers:H,body:JSON.stringify(r)});gm.value="";load()}catch(e){alert("Try again")}}
+</script></body></html>
