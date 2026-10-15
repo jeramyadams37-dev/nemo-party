@@ -97,3 +97,22 @@ async function draw(){if(prompt("Host PIN?")!=="1108")return;dc.textContent="";l
 const m=new Map();r.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&k!=="guest"&&!/(^| )(dad|mom|mommy|daddy)( |$)/.test(k))m.set(k,x.n.trim())});const L=[...m.values()];if(!L.length){dp.textContent="No entries yet!";return}dc.textContent=L.length+" entered";let n=0;const w=L[Math.random()*L.length|0];const t=setInterval(()=>{dp.textContent="🎟️ "+L[Math.random()*L.length|0];if(++n>25){clearInterval(t);dp.textContent="🎉 "+w+" 🎉"}},120)}
 </script>
 <script>function clr(){dp.textContent="";dc.textContent=""}</script>
+<script>/*lb*/
+(()=>{let T0=0,TB=0,dB=0;const $=i=>document.getElementById(i);
+const nm=()=>{try{if(localStorage.pn)return localStorage.pn}catch(e){}const n=(prompt("Your name for the leaderboard?")||"").trim();try{localStorage.pn=n}catch(e){}return n};
+const bx=(p,id)=>{const d=document.createElement("div");d.id=id;d.className="how";d.textContent="🏆 Loading leaders...";p.appendChild(d);return d};
+const pb=document.createElement("button");pb.textContent="💾 Save my score";$("sea").parentNode.appendChild(pb);
+const LP=bx($("sea").parentNode,"lbp"),LM=bx($("m").parentNode,"lbm"),LB=bx($("bg").parentNode,"lbb");
+async function ref(){try{const r=await(await fetch(F+"/scores.json")).json()||{};
+const rd=(el,g,low,u)=>{const L=Object.values(r[g]||{}).sort((a,b)=>low?a.s-b.s:b.s-a.s).slice(0,3);el.innerHTML="🏆 <b>Top 3</b><br>"+(L.map((x,i)=>["🥇","🥈","🥉"][i]+" "+x.n+" · "+x.s+u).join("<br>")||"Be the first!")};
+rd(LP,"pop",0," pops");rd(LM,"match",1,"s");rd(LB,"bingo",1,"s")}catch(e){}}
+async function sub(g,s,low){const n=nm();if(!n)return;const k=n.toLowerCase().replace(/[^a-z0-9]/g,"_")||"x",u=F+"/scores/"+g+"/"+k+".json";
+try{const o=await(await fetch(u)).json();if(o&&(low?o.s<=s:o.s>=s)){alert("Nice! Your best is still "+o.s);return}
+const w=await fetch(u,{method:"PUT",body:JSON.stringify({n:n.replace(/</g,"&lt;"),s})});if(!w.ok)throw new Error(w.status);alert("🎉 Saved to the leaderboard!");ref()}catch(e){alert("Error: "+e)}}
+pb.onclick=()=>{const s=parseInt($("sc").textContent)||0;if(!s){alert("Pop some bubbles first!");return}sub("pop",s,0)};
+const _mk=mk;mk=function(){T0=0;_mk.apply(this,arguments)};
+$("m").addEventListener("click",()=>{if(!T0)T0=Date.now();setTimeout(()=>{if(T0&&document.querySelectorAll("#m .c.f").length==16){const s=Math.round((Date.now()-T0)/100)/10;T0=0;alert("🐙 All matched in "+s+" seconds!");sub("match",s,1)}},900)},true);
+$("bg").addEventListener("click",()=>{if(!TB)TB=Date.now()},true);
+new MutationObserver(()=>{if($("bw").textContent.includes("BINGO")&&TB&&!dB){dB=1;const s=Math.round((Date.now()-TB)/100)/10;alert("🔍 BINGO in "+s+" seconds!");sub("bingo",s,1)}}).observe($("bw"),{childList:true,characterData:true,subtree:true});
+setInterval(ref,10000);ref()})();
+</script>
