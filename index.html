@@ -37,13 +37,35 @@ function step(){const t=C.currentTime,f=N[M[k%16]];note(f,t,1.6,.12);if(k%4==0)n
 const A=new Audio('song.mp3');A.loop=true;b.onclick=()=>{const f=document.getElementById('yt');if(f)f.remove();if(on){A.pause();on=0;b.textContent='🎵 Music'}else{A.play();on=1;b.textContent='🔇 Stop'}}
 })();
 </script>
-<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button></nav>
+<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button><button onclick=show(6)>🎨 Color</button><button onclick=show(7)>🔍 Bingo</button><button onclick=show(8)>🫙 Jar</button></nav>
 <section class=on><div class=g id=g></div></section>
 <section><h2>Score: <span id=sc>0</span></h2><div id=sea></div></section>
 <section><h2>Find the pairs!</h2><div class=m id=m></div><p><button onclick=mk()>New game</button></p></section>
 <section><input id=gn placeholder="Your name"><br><textarea id=gm rows=3 placeholder="Leave a message"></textarea><br><button onclick=post()>Send 💙</button><div id=gl></div></section>
 <section><h2>You're invited! 🎈</h2><p style="font-size:20px">Ilah's 2nd Birthday<br>Sunday, November 8th · 2:00 PM<br><a style="color:#fff" href="https://maps.google.com/?q=330+W+Adams+St+Greenview+IL">📍 330 W Adams St, Greenview IL</a></p><a href="tel:2173615057"><button>📞 RSVP: 217-361-5057</button></a></section>
 <section><h2>🎁 Door Prize!</h2><p>Sign the guestbook to get entered!</p><div id=dp style="font-size:34px;min-height:90px;margin:10px"></div><button onclick=draw()>🎲 Draw Winner</button><button onclick=clr()>🔄 Reset</button><p id=dc></p></section>
+<section><h2>🎨 Color the Sea!</h2><div id=pal></div><canvas id=cv width=360 height=360 style="background:#fff;border-radius:12px;touch-action:none;max-width:95%"></canvas><p><button onclick=cc()>🧽 Clear</button></p></section>
+<section><h2>🔍 Sea Bingo!</h2><p>Tap each one when you spot it!</p><div id=bg class=m style="grid-template-columns:repeat(3,1fr)"></div><h2 id=bw></h2></section>
+<section><h2>🫙 Guess the Jar!</h2><p>How many shells are in the jar?</p><input id=jn placeholder="Your name"><br><input id=jg type=number placeholder="Your guess"><br><button onclick=jsend()>Submit Guess 🐚</button><p id=jm></p><hr><button onclick=jrev()>🏆 Reveal Winner (host)</button><div id=jw style="font-size:26px;margin:10px"></div></section>
+<script>
+(()=>{const c=document.getElementById("cv"),x=c.getContext("2d");let col="#ff7a00",d=0;
+["#ff7a00","#2563eb","#ffd400","#16a34a","#e11d48","#7c3aed","#000000","#ffffff"].forEach(k=>{const b=document.createElement("button");b.style.cssText="background:"+k+";width:36px;height:36px;border-radius:50%;margin:3px;border:2px solid #fff;padding:0";b.onclick=()=>col=k;pal.appendChild(b)});
+function o(){x.strokeStyle="#000";x.lineWidth=4;x.beginPath();x.ellipse(170,180,110,70,0,0,7);x.moveTo(275,180);x.lineTo(340,120);x.lineTo(340,240);x.closePath();x.stroke();x.beginPath();x.arc(110,160,8,0,7);x.stroke()}
+function p(e){const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]}
+c.onpointerdown=e=>{d=1;const[a,b]=p(e);x.beginPath();x.moveTo(a,b)};
+c.onpointermove=e=>{if(!d)return;const[a,b]=p(e);x.strokeStyle=col;x.lineWidth=col=="#ffffff"?24:8;x.lineCap="round";x.lineTo(a,b);x.stroke()};
+c.onpointerup=c.onpointerleave=()=>d=0;
+window.cc=()=>{x.clearRect(0,0,c.width,c.height);o()};o()})();
+(()=>{const T=[["🎈","A balloon"],["🐠","Orange outfit"],["🎂","The cake"],["🐚","A seashell"],["😊","Ilah smiling"],["🌊","Something blue"],["🐟","A fish decoration"],["🎁","A present"],["👏","Big cheer!"]],on=Array(9).fill(0),L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+T.forEach((t,i)=>{const c=document.createElement("div");c.className="c";c.style.cssText="flex-direction:column;font-size:30px;line-height:1.1;cursor:pointer";c.innerHTML=t[0]+"<small style='font-size:12px'>"+t[1]+"</small>";c.onclick=()=>{on[i]^=1;c.style.background=on[i]?"#22c55e":"";bw.textContent=L.some(l=>l.every(j=>on[j]))?"🎉 BINGO! 🎉":""};bg.appendChild(c)})})();
+async function jsend(){const n=jn.value.trim(),v=parseInt(jg.value);if(!n||isNaN(v)){jm.textContent="Enter your name and a number";return}
+try{const k=n.toLowerCase().replace(/[^a-z0-9]/g,"_")||"x";const r=await fetch(F+"/jar/"+k+".json",{method:"PUT",body:JSON.stringify({n:n.replace(/</g,"&lt;"),g:v})});if(!r.ok)throw new Error(r.status);jm.textContent="Got it! Your guess: "+v+" 🎉";jg.value=""}catch(e){jm.textContent="Error: "+e}}
+async function jrev(){if(!window.pinOK){if(prompt("Host PIN?")!=="1108")return;window.pinOK=1}
+const a=parseInt(prompt("How many shells are really in the jar?"));if(isNaN(a))return;
+try{const r=await(await fetch(F+"/jar.json")).json();const L=r?Object.values(r):[];if(!L.length){jw.textContent="No guesses yet!";return}
+const best=Math.min(...L.map(x=>Math.abs(x.g-a)));const W=L.filter(x=>Math.abs(x.g-a)==best);
+jw.innerHTML="🏆 "+W.map(x=>x.n+" ("+x.g+")").join(" & ")+"<br><small>"+L.length+" guesses · answer: "+a+"</small>"}catch(e){jw.textContent="Error: "+e}}
+</script>
 <script>
 async function draw(){if(prompt("Host PIN?")!=="1108")return;dc.textContent="";let r;try{r=await(await fetch(U,{headers:H})).json()}catch(e){dp.textContent="Couldn't load entries";return}
 const m=new Map();r.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&k!=="guest"&&!/(^| )(dad|mom|mommy|daddy)( |$)/.test(k))m.set(k,x.n.trim())});const L=[...m.values()];
