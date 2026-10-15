@@ -30,7 +30,7 @@ const b=document.createElement("button");b.id="mu";b.textContent="🎵 Music";do
 let C,on=0,tm,k=0;const N=[392,440,523,587,659,784],M=[0,2,4,2,3,1,0,1,2,4,3,2,1,0,1,0];
 function note(f,t,d,v){const o=C.createOscillator(),g=C.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.05);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(C.destination);o.start(t);o.stop(t+d)}
 function step(){const t=C.currentTime,f=N[M[k%16]];note(f,t,1.6,.12);if(k%4==0)note(f/2,t,3,.08);k++}
-b.onclick=()=>{const f=document.getElementById('yt');if(on){if(f)f.remove();on=0;b.textContent='🎵 Music'}else{const x=document.createElement('iframe');x.id='yt';x.src='https://www.youtube.com/embed/39Pacb4Fh40?autoplay=1&loop=1&playlist=39Pacb4Fh40';x.allow='autoplay';x.style.cssText='position:fixed;bottom:50px;right:8px;width:160px;height:90px;border:0;z-index:9;border-radius:8px';document.body.appendChild(x);on=1;b.textContent='🔇 Stop'}}
+b.onclick=()=>{const f=document.getElementById('yt');if(on){if(f)f.remove();on=0;b.textContent='🎵 Music'}else{const x=document.createElement('iframe');x.id='yt';x.src='https://www.youtube.com/embed/videoseries?list=PL31F3BB08EA703B0A&autoplay=1&loop=1';x.allow='autoplay';x.style.cssText='position:fixed;bottom:50px;right:8px;width:160px;height:90px;border:0;z-index:9;border-radius:8px';document.body.appendChild(x);on=1;b.textContent='🔇 Stop'}}
 })();
 </script>
 <nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button></nav>
