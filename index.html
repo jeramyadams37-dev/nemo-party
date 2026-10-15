@@ -37,7 +37,7 @@ function step(){const t=C.currentTime,f=N[M[k%16]];note(f,t,1.6,.12);if(k%4==0)n
 const A=new Audio('song.mp3');A.loop=true;b.onclick=()=>{const f=document.getElementById('yt');if(f)f.remove();if(on){A.pause();on=0;b.textContent='🎵 Music'}else{A.play();on=1;b.textContent='🔇 Stop'}}
 })();
 </script>
-<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button><button onclick=show(6)>🎨 Color</button><button onclick=show(7)>🔍 Bingo</button><button onclick=show(8)>🫙 Jar</button><button onclick=show(9)>📖 Book</button></nav>
+<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button><button onclick=show(6)>🎨 Color</button><button onclick=show(7)>🔍 Bingo</button><button onclick=show(8)>🫙 Jar</button><button onclick=show(9)>📖 Book</button><button onclick=show(10)>📷 Booth</button></nav>
 <section class=on><div class=g id=g></div></section>
 <section><h2>Score: <span id=sc>0</span></h2><div id=sea></div></section>
 <section><h2>Find the pairs!</h2><div class=m id=m></div><p><button onclick=mk()>New game</button></p></section>
@@ -48,6 +48,33 @@ const A=new Audio('song.mp3');A.loop=true;b.onclick=()=>{const f=document.getEle
 <section><h2>🔍 Sea Bingo!</h2><p>Tap each one when you spot it!</p><div id=bg class=m style="grid-template-columns:repeat(3,1fr)"></div><h2 id=bw></h2></section>
 <section><h2>🫙 Guess the Jar!</h2><p>How many shells are in the jar?</p><input id=jn placeholder="Your name"><br><input id=jg type=number placeholder="Your guess"><br><button onclick=jsend()>Submit Guess 🐚</button><p id=jm></p><hr><button onclick=jrev()>🏆 Reveal Winner (host)</button><div id=jw style="font-size:26px;margin:10px"></div></section>
 <section><h2>📖 Guest Coloring Book</h2><p class=how>Color a fish in the 🎨 Color tab, then tap Add to Book. Every guest's artwork shows up here!</p><div id=bk class=g></div></section>
+<section><h2>📷 Party Photo Booth</h2><p class=how>📷 Tap Start Camera, pick a filter, and snap! Then tap Add to Scrapbook so everyone can see your photo.</p><button id=cs>📷 Start Camera</button><div id=cb style="display:none"><canvas id=pc width=480 height=640 style="width:92%;max-width:360px;border-radius:12px;background:#000"></canvas><div id=pf></div><p><button id=sn>📸 Snap</button><button id=fl>🔄 Flip</button></p><p id=ps style="display:none"><button id=pa>✅ Add to Scrapbook</button><button id=pr>🔁 Retake</button><a id=pd download=ilah-party.jpg style="display:inline-block;background:#ff8a1f;color:#fff;border-radius:20px;padding:10px 16px;text-decoration:none;margin:3px">💾 Save</a></p></div><h2>📔 Party Scrapbook</h2><div id=pbk class=g>Loading...</div></section>
+<script>/*booth*/
+(()=>{const $=i=>document.getElementById(i),c=$("pc"),x=c.getContext("2d"),v=document.createElement("video");v.setAttribute("playsinline","");v.muted=true;
+let st=null,fm="user",fi=0,fr=0,raf=0,t=0;
+const FL=[["🌊 Ocean","#8fd3ff",["🫧","🫧","🐠","🫧"],"In TWO the Sea!"],["☀️ Reef","#ffd6a0",["🐠","🪸","🐚","🪸"],"Ilah's Fin-tastic Day"],["🌌 Deep","#6a8cff",["✨","🐡","✨","🫧"],"Just keep swimming!"],["🎈 Party","#ffc2e8",["🎈","🎉","🎈","🎂"],"Ilah is 2!"]];
+FL.forEach((f,i)=>{const b=document.createElement("button");b.textContent=f[0];b.style.margin="3px";b.onclick=()=>fi=i;$("pf").appendChild(b)});
+function draw(){raf=requestAnimationFrame(draw);if(fr||!v.videoWidth)return;t+=.02;
+const W=c.width,H=c.height,s=Math.max(W/v.videoWidth,H/v.videoHeight),w=v.videoWidth*s,h=v.videoHeight*s;
+x.save();if(fm=="user"){x.translate(W,0);x.scale(-1,1)}x.drawImage(v,(W-w)/2,(H-h)/2,w,h);x.restore();
+const f=FL[fi];x.globalCompositeOperation="multiply";x.fillStyle=f[1];x.fillRect(0,0,W,H);x.globalCompositeOperation="source-over";
+const gr=x.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.75);gr.addColorStop(0,"rgba(0,40,120,0)");gr.addColorStop(1,"rgba(0,40,120,.55)");x.fillStyle=gr;x.fillRect(0,0,W,H);
+x.font="56px serif";x.textAlign="center";
+f[2].forEach((e,i)=>{const px=[50,W-50,60,W-60][i],py=[70+Math.sin(t+i)*10,90+Math.cos(t+i)*10,H-150+Math.sin(t*1.3+i)*12,H-170+Math.cos(t*1.1+i)*12][i];x.fillText(e,px,py)});
+x.fillStyle="rgba(255,255,255,.35)";for(let i=0;i<7;i++){const bx=(i*83+30)%W,by=H-((t*60+i*97)%H);x.beginPath();x.arc(bx,by,8+i%3*5,0,7);x.fill()}
+x.fillStyle="rgba(0,60,140,.75)";x.fillRect(0,H-70,W,70);x.fillStyle="#fff";x.font="bold 30px system-ui";x.fillText("🐠 "+f[3]+" 🐠",W/2,H-26)}
+async function go(){try{if(st)st.getTracks().forEach(k=>k.stop());st=await navigator.mediaDevices.getUserMedia({video:{facingMode:fm,width:{ideal:960},height:{ideal:1280}},audio:false});v.srcObject=st;await v.play();$("cb").style.display="block";$("cs").style.display="none";fr=0;$("ps").style.display="none";cancelAnimationFrame(raf);draw()}catch(e){alert("Camera error: "+e.message+" (allow camera access in your browser)")}}
+window.stopcam=()=>{cancelAnimationFrame(raf);if(st)st.getTracks().forEach(k=>k.stop());st=null;$("cb").style.display="none";$("cs").style.display=""};
+$("cs").onclick=go;
+$("fl").onclick=()=>{fm=fm=="user"?"environment":"user";go()};
+$("sn").onclick=()=>{fr=1;$("ps").style.display="block";$("pd").href=c.toDataURL("image/jpeg",.85)};
+$("pr").onclick=()=>{fr=0;$("ps").style.display="none"};
+$("pa").onclick=async()=>{let n="";try{n=localStorage.pn||""}catch(e){}if(!n)n=(prompt("Your name?")||"Guest").trim();try{localStorage.pn=n}catch(e){}
+const o=document.createElement("canvas");o.width=360;o.height=480;o.getContext("2d").drawImage(c,0,0,360,480);
+try{const r=await fetch(F+"/party.json",{method:"POST",body:JSON.stringify({n:n.replace(/</g,"&lt;"),d:o.toDataURL("image/jpeg",.7),t:Date.now()})});if(!r.ok)throw new Error(r.status);alert("📔 Added to the scrapbook! 🎉");fr=0;$("ps").style.display="none";window.pbo()}catch(e){alert("Error: "+e)}};
+window.pbo=async()=>{try{const r=await(await fetch(F+"/party.json?orderBy=%22$key%22&limitToLast=30")).json();const L=r?Object.values(r).reverse():[];$("pbk").innerHTML=L.filter(x=>typeof x.d=="string"&&x.d.startsWith("data:image/jpeg")).map(x=>`<div style="break-inside:avoid;margin-bottom:10px"><img src="${x.d}"><div>📸 ${x.n}</div></div>`).join("")||"No photos yet. Be the first!"}catch(e){$("pbk").textContent="Couldn't load photos"}};
+})();
+</script>
 <script>
 async function sv(){const n=(prompt("Your name for the coloring book?")||"").trim();if(!n)return;const t=document.createElement("canvas");t.width=t.height=240;const q=t.getContext("2d");q.fillStyle="#fff";q.fillRect(0,0,240,240);q.drawImage(cv,0,0,240,240);try{const r=await fetch(F+"/art.json",{method:"POST",body:JSON.stringify({n:n.replace(/</g,"&lt;"),d:t.toDataURL("image/jpeg",.6)})});if(!r.ok)throw new Error(r.status);alert("Added to the book! 🎉");cc()}catch(e){alert("Error: "+e)}}
 async function lb(){bk.textContent="Loading...";try{const r=await(await fetch(F+"/art.json")).json();const L=r?Object.values(r).reverse():[];bk.innerHTML=L.filter(x=>typeof x.d=="string"&&x.d.startsWith("data:image/jpeg")).map(x=>`<div style="break-inside:avoid;margin-bottom:10px"><img src="${x.d}" style="background:#fff"><div>🎨 ${x.n}</div></div>`).join("")||"No artwork yet. Be the first!"}catch(e){bk.textContent="Couldn't load the book"}}
@@ -81,7 +108,7 @@ const t=setInterval(()=>{dp.textContent="🎟️ "+L[Math.random()*L.length|0];i
 <script>
 const P=["photos/p1.jpg","photos/p2.jpg","photos/p3.jpg","photos/p4.jpg","photos/p5.jpg","photos/p6.jpg","photos/p7.jpg","photos/p8.jpg","photos/p9.jpg","photos/p10.jpg","photos/p11.jpg","photos/p12.jpg","photos/p13.jpg","photos/p14.jpg","photos/p15.jpg","photos/p16.jpg","photos/p17.jpg","photos/p18.jpg"],B="01a13f23-dbf6-7643-9509-686070c87a8c",U="https://jsonblob.com/api/jsonBlob/"+B,H={"Content-Type":"application/json","Accept":"application/json"};
 const S=document.querySelectorAll("section");let t;
-function show(n){S.forEach((s,i)=>s.classList.toggle("on",i==n));clearInterval(t);if(n==1)t=setInterval(bub,700);if(n==2)mk();if(n==3)load();if(n==9)lb()}
+function show(n){S.forEach((s,i)=>s.classList.toggle("on",i==n));clearInterval(t);if(n==1)t=setInterval(bub,700);if(n==2)mk();if(n==3)load();if(n==9)lb();if(n==10)pbo();if(n!=10&&window.stopcam)stopcam()}
 g.innerHTML=P.map(p=>`<img loading=lazy src="${p}">`).join("");
 let sc0=0;function bub(){const b=document.createElement("div");b.className="bub";b.textContent=["🫧","🐠","🐟","🫧"][Math.random()*4|0];b.style.left=Math.random()*80+"%";b.onpointerdown=()=>{sc.textContent=++sc0;b.remove()};b.onanimationend=()=>b.remove();sea.appendChild(b)}
 let a=[],lock=0;function mk(){const e=["🐠","🐢","🦈","🐙","🦀","🐡","🐬","🐳"];const d=[...e,...e].sort(()=>Math.random()-.5);m.innerHTML="";a=[];d.forEach(x=>{const c=document.createElement("div");c.className="c";c.textContent="❓";c.onclick=()=>{if(lock||c.classList.contains("f")||a.includes(c))return;c.textContent=x;c.classList.add("f");a.push(c);if(a.length==2){lock=1;const[p,q]=a;if(p.textContent==q.textContent){a=[];lock=0}else setTimeout(()=>{[p,q].forEach(z=>{z.textContent="❓";z.classList.remove("f")});a=[];lock=0},800)}};m.appendChild(c)})}
