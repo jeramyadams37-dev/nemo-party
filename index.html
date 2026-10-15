@@ -37,16 +37,22 @@ function step(){const t=C.currentTime,f=N[M[k%16]];note(f,t,1.6,.12);if(k%4==0)n
 const A=new Audio('song.mp3');A.loop=true;b.onclick=()=>{const f=document.getElementById('yt');if(f)f.remove();if(on){A.pause();on=0;b.textContent='🎵 Music'}else{A.play();on=1;b.textContent='🔇 Stop'}}
 })();
 </script>
-<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button><button onclick=show(6)>🎨 Color</button><button onclick=show(7)>🔍 Bingo</button><button onclick=show(8)>🫙 Jar</button></nav>
+<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button><button onclick=show(6)>🎨 Color</button><button onclick=show(7)>🔍 Bingo</button><button onclick=show(8)>🫙 Jar</button><button onclick=show(9)>📖 Book</button></nav>
 <section class=on><div class=g id=g></div></section>
 <section><h2>Score: <span id=sc>0</span></h2><div id=sea></div></section>
 <section><h2>Find the pairs!</h2><div class=m id=m></div><p><button onclick=mk()>New game</button></p></section>
 <section><input id=gn placeholder="Your name"><br><textarea id=gm rows=3 placeholder="Leave a message"></textarea><br><button onclick=post()>Send 💙</button><div id=gl></div></section>
 <section><h2>You're invited! 🎈</h2><p style="font-size:20px">Ilah's 2nd Birthday<br>Sunday, November 8th · 2:00 PM<br><a style="color:#fff" href="https://maps.google.com/?q=330+W+Adams+St+Greenview+IL">📍 330 W Adams St, Greenview IL</a></p><a href="tel:2173615057"><button>📞 RSVP: 217-361-5057</button></a></section>
 <section><h2>🎁 Door Prize!</h2><p>Sign the guestbook to get entered!</p><div id=dp style="font-size:34px;min-height:90px;margin:10px"></div><button onclick=draw()>🎲 Draw Winner</button><button onclick=clr()>🔄 Reset</button><p id=dc></p></section>
-<section><h2>🎨 Color the Sea!</h2><div id=pal></div><canvas id=cv width=360 height=360 style="background:#fff;border-radius:12px;touch-action:none;max-width:95%"></canvas><p><button onclick=cc()>🧽 Clear</button></p></section>
+<section><h2>🎨 Color the Sea!</h2><div id=pal></div><canvas id=cv width=360 height=360 style="background:#fff;border-radius:12px;touch-action:none;max-width:95%"></canvas><p><button onclick=cc()>🧽 Clear</button><button onclick=sv()>📖 Add to Book</button></p></section>
 <section><h2>🔍 Sea Bingo!</h2><p>Tap each one when you spot it!</p><div id=bg class=m style="grid-template-columns:repeat(3,1fr)"></div><h2 id=bw></h2></section>
 <section><h2>🫙 Guess the Jar!</h2><p>How many shells are in the jar?</p><input id=jn placeholder="Your name"><br><input id=jg type=number placeholder="Your guess"><br><button onclick=jsend()>Submit Guess 🐚</button><p id=jm></p><hr><button onclick=jrev()>🏆 Reveal Winner (host)</button><div id=jw style="font-size:26px;margin:10px"></div></section>
+<section><h2>📖 Guest Coloring Book</h2><p class=how>Color a fish in the 🎨 Color tab, then tap Add to Book. Every guest's artwork shows up here!</p><div id=bk class=g></div></section>
+<script>
+async function sv(){const n=(prompt("Your name for the coloring book?")||"").trim();if(!n)return;const t=document.createElement("canvas");t.width=t.height=240;const q=t.getContext("2d");q.fillStyle="#fff";q.fillRect(0,0,240,240);q.drawImage(cv,0,0,240,240);try{const r=await fetch(F+"/art.json",{method:"POST",body:JSON.stringify({n:n.replace(/</g,"&lt;"),d:t.toDataURL("image/jpeg",.6)})});if(!r.ok)throw new Error(r.status);alert("Added to the book! 🎉");cc()}catch(e){alert("Error: "+e)}}
+async function lb(){bk.textContent="Loading...";try{const r=await(await fetch(F+"/art.json")).json();const L=r?Object.values(r).reverse():[];bk.innerHTML=L.filter(x=>typeof x.d=="string"&&x.d.startsWith("data:image/jpeg")).map(x=>`<div style="break-inside:avoid;margin-bottom:10px"><img src="${x.d}" style="background:#fff"><div>🎨 ${x.n}</div></div>`).join("")||"No artwork yet. Be the first!"}catch(e){bk.textContent="Couldn't load the book"}}
+const _s=show;show=function(n){_s(n);if(n==9)lb()};
+</script>
 <script>
 (()=>{const c=document.getElementById("cv"),x=c.getContext("2d");let col="#ff7a00",d=0;
 ["#ff7a00","#2563eb","#ffd400","#16a34a","#e11d48","#7c3aed","#000000","#ffffff"].forEach(k=>{const b=document.createElement("button");b.style.cssText="background:"+k+";width:36px;height:36px;border-radius:50%;margin:3px;border:2px solid #fff;padding:0";b.onclick=()=>col=k;pal.appendChild(b)});
