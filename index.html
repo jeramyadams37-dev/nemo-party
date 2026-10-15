@@ -37,12 +37,20 @@ function step(){const t=C.currentTime,f=N[M[k%16]];note(f,t,1.6,.12);if(k%4==0)n
 const A=new Audio('song.mp3');A.loop=true;b.onclick=()=>{const f=document.getElementById('yt');if(f)f.remove();if(on){A.pause();on=0;b.textContent='🎵 Music'}else{A.play();on=1;b.textContent='🔇 Stop'}}
 })();
 </script>
-<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button></nav>
+<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button></nav>
 <section class=on><div class=g id=g></div></section>
 <section><h2>Score: <span id=sc>0</span></h2><div id=sea></div></section>
 <section><h2>Find the pairs!</h2><div class=m id=m></div><p><button onclick=mk()>New game</button></p></section>
 <section><input id=gn placeholder="Your name"><br><textarea id=gm rows=3 placeholder="Leave a message"></textarea><br><button onclick=post()>Send 💙</button><div id=gl></div></section>
 <section><h2>You're invited! 🎈</h2><p style="font-size:20px">Ilah's 2nd Birthday<br>Sunday, November 8th · 2:00 PM<br><a style="color:#fff" href="https://maps.google.com/?q=330+W+Adams+St+Greenview+IL">📍 330 W Adams St, Greenview IL</a></p><a href="tel:2173615057"><button>📞 RSVP: 217-361-5057</button></a></section>
+<section><h2>🎁 Door Prize!</h2><p>Sign the guestbook to get entered!</p><div id=dp style="font-size:34px;min-height:90px;margin:10px"></div><button onclick=draw()>🎲 Draw Winner</button><p id=dc></p></section>
+<script>
+async function draw(){if(prompt("Host PIN?")!=="1108")return;dc.textContent="";let r;try{r=await(await fetch(U,{headers:H})).json()}catch(e){dp.textContent="Couldn't load entries";return}
+const m=new Map();r.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&k!=="guest")m.set(k,x.n.trim())});const L=[...m.values()];
+if(!L.length){dp.textContent="No entries yet!";return}
+dc.textContent=L.length+" entered";let n=0;const w=L[Math.random()*L.length|0];
+const t=setInterval(()=>{dp.textContent="🎟️ "+L[Math.random()*L.length|0];if(++n>25){clearInterval(t);dp.textContent="🎉 "+w+" 🎉"}},120)}
+</script>
 <script>
 const P=["photos/p1.jpg","photos/p2.jpg","photos/p3.jpg","photos/p4.jpg","photos/p5.jpg","photos/p6.jpg","photos/p7.jpg","photos/p8.jpg","photos/p9.jpg","photos/p10.jpg","photos/p11.jpg","photos/p12.jpg","photos/p13.jpg","photos/p14.jpg","photos/p15.jpg","photos/p16.jpg","photos/p17.jpg","photos/p18.jpg"],B="",U="https://jsonblob.com/api/jsonBlob/"+B,H={"Content-Type":"application/json","Accept":"application/json"};
 const S=document.querySelectorAll("section");let t;
