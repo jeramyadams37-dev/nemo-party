@@ -43,7 +43,7 @@ const A=new Audio('song.mp3');A.loop=true;b.onclick=()=>{const f=document.getEle
 <section><h2>Find the pairs!</h2><div class=m id=m></div><p><button onclick=mk()>New game</button></p></section>
 <section><input id=gn placeholder="Your name"><br><textarea id=gm rows=3 placeholder="Leave a message"></textarea><br><button onclick=post()>Send 💙</button><div id=gl></div></section>
 <section><h2>You're invited! 🎈</h2><p style="font-size:20px">Ilah's 2nd Birthday<br>Sunday, November 8th · 2:00 PM<br><a style="color:#fff" href="https://maps.google.com/?q=330+W+Adams+St+Greenview+IL">📍 330 W Adams St, Greenview IL</a></p><a href="tel:2173615057"><button>📞 RSVP: 217-361-5057</button></a></section>
-<section><h2>🎁 Door Prize!</h2><p>Sign the guestbook to get entered!</p><div id=dp style="font-size:34px;min-height:90px;margin:10px"></div><button onclick=draw()>🎲 Draw Winner</button><p id=dc></p></section>
+<section><h2>🎁 Door Prize!</h2><p>Sign the guestbook to get entered!</p><div id=dp style="font-size:34px;min-height:90px;margin:10px"></div><button onclick=draw()>🎲 Draw Winner</button><button onclick=clr()>🔄 Reset</button><p id=dc></p></section>
 <script>
 async function draw(){if(prompt("Host PIN?")!=="1108")return;dc.textContent="";let r;try{r=await(await fetch(U,{headers:H})).json()}catch(e){dp.textContent="Couldn't load entries";return}
 const m=new Map();r.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&k!=="guest")m.set(k,x.n.trim())});const L=[...m.values()];
@@ -69,3 +69,4 @@ async function post(){const n=gn.value.trim()||"Guest",t=gm.value.trim().replace
 async function draw(){if(prompt("Host PIN?")!=="1108")return;dc.textContent="";let r;try{r=await G()}catch(e){dp.textContent="Couldn't load entries";return}
 const m=new Map();r.forEach(x=>{const k=x.n.trim().toLowerCase();if(k&&k!=="guest")m.set(k,x.n.trim())});const L=[...m.values()];if(!L.length){dp.textContent="No entries yet!";return}dc.textContent=L.length+" entered";let n=0;const w=L[Math.random()*L.length|0];const t=setInterval(()=>{dp.textContent="🎟️ "+L[Math.random()*L.length|0];if(++n>25){clearInterval(t);dp.textContent="🎉 "+w+" 🎉"}},120)}
 </script>
+<script>function clr(){dp.textContent="";dc.textContent=""}</script>
