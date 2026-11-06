@@ -37,7 +37,19 @@ function step(){const t=C.currentTime,f=N[M[k%16]];note(f,t,1.6,.12);if(k%4==0)n
 const A=new Audio('song.mp3');A.loop=true;b.onclick=()=>{const f=document.getElementById('yt');if(f)f.remove();if(on){A.pause();on=0;b.textContent='🎵 Music'}else{A.play();on=1;b.textContent='🔇 Stop'}}
 })();
 </script>
-<nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button><button onclick=show(6)>🎨 Color</button><button onclick=show(7)>🔍 Bingo</button><button onclick=show(8)>🫙 Jar</button><button onclick=show(9)>📖 Book</button><button onclick=show(10)>📷 Booth</button></nav>
+<div id='welcome' style='position:fixed;inset:0;background:#0a4d8c;z-index:20;overflow:auto;padding:24px 16px;text-align:center'>
+<h1>🐠 In TWO the Sea! 🐠</h1>
+<p style='font-size:19px'>Welcome to Ilah's 2nd Birthday!</p>
+<p style='font-size:17px;line-height:1.7;text-align:left;max-width:420px;margin:auto'>
+<b>How to play — 3 easy steps:</b><br>
+<b>1.</b> 💌 Sign the <b>Guestbook</b> with your real name — that enters you for the Door Prize!<br>
+<b>2.</b> 🫧 Play <b>Pop, Match &amp; Bingo</b>, 🎨 <b>Color</b> a fish, and 📷 snap a <b>Booth</b> photo.<br>
+<b>3.</b> After coloring or snapping, tap <b>Add to Book</b> / <b>Add to Scrapbook</b> or nobody will see it!<br><br>
+🫙 Don't forget to guess how many shells are in the <b>Jar</b> — one guess per person.<br>
+🎵 Tap <b>Music</b> top-right for party music.
+</p>
+<p><button onclick="document.getElementById('welcome').style.display='none'" style='font-size:19px;padding:14px 28px'>Start the party! 🎉</button></p>
+</div><nav><button onclick=show(0)>📸 Photos</button><button onclick=show(1)>🫧 Pop</button><button onclick=show(2)>🐙 Match</button><button onclick=show(3)>💌 Guestbook</button><button onclick=show(4)>🎈 Info</button><button onclick=show(5)>🎁 Door Prize</button><button onclick=show(6)>🎨 Color</button><button onclick=show(7)>🔍 Bingo</button><button onclick=show(8)>🫙 Jar</button><button onclick=show(9)>📖 Book</button><button onclick=show(10)>📷 Booth</button><button onclick="document.getElementById('welcome').style.display='block'">❓ How to</button></nav>
 <section class=on><div class=g id=g></div></section>
 <section><h2>Score: <span id=sc>0</span></h2><div id=sea></div></section>
 <section><h2>Find the pairs!</h2><div class=m id=m></div><p><button onclick=mk()>New game</button></p></section>
